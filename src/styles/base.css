@@ -1,0 +1,128 @@
+/* ---------------------------------------------------------------------
+   Shared layout & primitives for the landing page.
+   Design tokens and shared primitives (.btn, .badge, .card) live in
+   ../index.css.
+   --------------------------------------------------------------------- */
+
+:root {
+  --site-max: 74.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.site-shell {
+  min-height: 100dvh;
+}
+
+.site-container {
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.site-section {
+  padding-block: var(--space-12);
+  scroll-margin-top: 5rem;
+}
+
+.site-section--tinted {
+  background: var(--color-surface-muted);
+}
+
+.site-eyebrow {
+  display: inline-flex;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-accent-text);
+}
+
+.site-section-head {
+  max-width: 46rem;
+  margin-bottom: var(--space-10);
+}
+.site-section-head h2 {
+  font-size: var(--text-2xl);
+}
+.site-section-head__lede {
+  margin-top: var(--space-3);
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+.site-note {
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: 52ch;
+}
+
+/* ---- Brand wordmark (used in header and footer) ---- */
+
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: var(--color-text-strong);
+  font-weight: var(--weight-bold);
+}
+.site-brand:hover {
+  color: var(--color-text-strong);
+}
+.site-brand__name {
+  font-size: var(--text-lg);
+  letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 34px;
+  height: 34px;
+}
+
+.check-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  color: var(--color-accent);
+}
+
+/* ---- Skip link ---- */
+
+.skip-link {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: 30;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+  transform: translateY(-300%);
+  transition: transform var(--transition-fast);
+}
+.skip-link:focus {
+  transform: translateY(0);
+  color: var(--color-on-primary);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 960px) {
+  .site-container {
+    padding-inline: var(--space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .site-container {
+    padding-inline: var(--space-4);
+  }
+}

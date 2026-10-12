@@ -1,0 +1,442 @@
+/* =====================================================================
+   Assessment page — src/pages/AssessmentPage.tsx
+   ===================================================================== */
+
+/* ---- Page hero ---- */
+
+.assess-hero {
+  padding-block: var(--space-12) var(--space-10);
+  border-bottom: 1px solid var(--color-border);
+}
+.assess-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.assess-hero__back:hover {
+  color: var(--color-accent);
+}
+.assess-hero__back .arrow-left-icon {
+  width: 16px;
+  height: 16px;
+}
+.assess-hero h1 {
+  max-width: 20ch;
+}
+.assess-hero__lede {
+  max-width: 52ch;
+  margin-top: var(--space-5);
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+.assess-body {
+  padding-block: var(--space-10) var(--space-16);
+}
+.assess-container {
+  max-width: 46rem;
+}
+
+/* ---- Native fieldset/legend reset (used by option groups) ---- */
+
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+legend {
+  padding: 0;
+}
+
+/* ---- Step rail ---- */
+
+.assess-rail {
+  list-style: none;
+  margin: 0 0 var(--space-6);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+}
+.assess-rail__cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font: inherit;
+  color: var(--color-text-faint);
+  text-align: left;
+  cursor: default;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+button.assess-rail__cell {
+  cursor: pointer;
+}
+button.assess-rail__cell:hover {
+  color: var(--color-accent);
+}
+.assess-rail__cell.is-done {
+  color: var(--color-text-muted);
+}
+.assess-rail__cell.is-current {
+  color: var(--color-text-strong);
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+.assess-rail__num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  background: var(--color-hover-overlay);
+  color: var(--color-text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  flex: none;
+}
+.assess-rail__cell.is-done .assess-rail__num {
+  background: var(--color-accent-soft);
+  color: var(--color-accent-text);
+}
+.assess-rail__cell.is-current .assess-rail__num {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.assess-rail__num .check-icon {
+  width: 14px;
+  height: 14px;
+}
+.assess-rail__label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  white-space: nowrap;
+}
+
+/* ---- Progress ---- */
+
+.assess-progress {
+  margin-bottom: var(--space-8);
+}
+.assess-progress__track {
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-hover-overlay);
+  overflow: hidden;
+}
+.assess-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
+  transition: width var(--transition-base);
+}
+
+/* ---- Step layout ---- */
+
+.assess-step__meta {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-faint);
+}
+.assess-step__title {
+  font-size: var(--text-xl);
+}
+.assess-step__lede {
+  margin: var(--space-3) 0 var(--space-6);
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+}
+
+.assess-group,
+.assess-fieldset {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  padding: var(--space-8) var(--space-6);
+  margin: 0 0 var(--space-6);
+}
+.assess-group h3 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-md);
+}
+.assess-fieldset legend {
+  padding: 0 var(--space-2);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+.assess-group__hint {
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.assess-group__hint--bottom {
+  margin: var(--space-4) 0 0;
+}
+
+/* ---- Option cards (radio) ---- */
+
+.assess-options {
+  display: grid;
+  gap: var(--space-3);
+}
+.assess-options--activity {
+  grid-template-columns: repeat(2, 1fr);
+}
+.assess-options--goal,
+.assess-options--diet {
+  grid-template-columns: repeat(3, 1fr);
+}
+.assess-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+.assess-option:hover {
+  border-color: var(--color-text-faint);
+}
+.assess-option.is-selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+.assess-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+}
+.assess-option:has(input:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.assess-option__label {
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+.assess-option__hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* ---- Chips (checkbox) ---- */
+
+.assess-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+.assess-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  cursor: pointer;
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+.assess-chip:hover {
+  border-color: var(--color-text-faint);
+}
+.assess-chip.is-selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent-text);
+}
+.assess-chip input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  margin: 0;
+}
+.assess-chip:has(input:focus-visible) {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.assess-chip__tag {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-regular);
+  opacity: 0.75;
+}
+
+/* ---- Fields & actions ---- */
+
+.assess-row {
+  display: grid;
+  gap: var(--space-5);
+}
+.assess-row--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.assess-row .field {
+  margin-bottom: 0;
+}
+.assess-unit {
+  margin-left: var(--space-1);
+  font-weight: var(--weight-regular);
+  color: var(--color-text-faint);
+}
+.assess-other {
+  margin-top: var(--space-5);
+  margin-bottom: 0;
+}
+.assess-error {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-danger);
+}
+
+.assess-callout {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-accent-soft);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+.assess-callout h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+}
+.assess-callout p {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.assess-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+/* ---- Review step ---- */
+
+.assess-review {
+  margin-bottom: var(--space-6);
+}
+.assess-review__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+.assess-review__head h3 {
+  margin: 0;
+  font-size: var(--text-md);
+}
+.assess-review__edit {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+.assess-review__edit:hover {
+  color: var(--color-accent-hover);
+}
+.assess-review__list {
+  margin: 0;
+  display: grid;
+}
+.assess-review__row {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+}
+.assess-review__row:last-child {
+  border-bottom: 0;
+}
+.assess-review__row dt {
+  color: var(--color-text-muted);
+}
+.assess-review__row dd {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-weight: var(--weight-medium);
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 960px) {
+  .assess-options--activity,
+  .assess-options--goal,
+  .assess-options--diet {
+    grid-template-columns: 1fr;
+  }
+  .assess-row--3 {
+    grid-template-columns: 1fr;
+  }
+  .assess-rail__label {
+    display: none;
+  }
+  .assess-rail__cell {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .assess-hero {
+    padding-block: var(--space-8);
+  }
+  .assess-body {
+    padding-block: var(--space-8) var(--space-12);
+  }
+  .assess-group,
+  .assess-fieldset {
+    padding: var(--space-6) var(--space-5);
+  }
+  .assess-review__row {
+    grid-template-columns: 1fr;
+    gap: 0.125rem;
+  }
+}

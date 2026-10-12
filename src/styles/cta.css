@@ -1,0 +1,52 @@
+/* ---- Final CTA ---- */
+
+.site-start {
+  padding-top: 0;
+}
+.site-start__inner {
+  background: var(--color-cta-bg);
+  color: var(--color-cta-text);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-16) var(--space-10);
+  text-align: center;
+}
+.site-start__inner .site-eyebrow {
+  margin-bottom: var(--space-4);
+  color: var(--color-cta-muted);
+}
+.site-start h2 {
+  font-size: var(--text-2xl);
+  max-width: 30rem;
+  margin-inline: auto;
+  color: var(--color-cta-text);
+}
+.site-start__lede {
+  max-width: 42rem;
+  margin: var(--space-4) auto 0;
+  font-size: var(--text-md);
+  color: var(--color-cta-muted);
+}
+.site-start__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+/* Citrus primary keeps the CTA strong against the forest panel. */
+.site-start__inner .btn--primary {
+  background: var(--color-citrus);
+  color: var(--color-on-citrus);
+}
+.site-start__inner .btn--primary:hover {
+  background: var(--color-citrus-hover);
+  color: var(--color-on-citrus);
+}
+.site-start__inner .btn--ghost {
+  color: var(--color-cta-text);
+}
+.site-start__inner .btn--ghost:hover {
+  background: rgba(246, 244, 236, 0.1);
+  color: var(--color-cta-text);
+}
