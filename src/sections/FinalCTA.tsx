@@ -6,7 +6,7 @@ export function FinalCTA() {
     <section id="start" className="site-section site-start" aria-labelledby="start-title">
       <div className="site-container">
         <div className="site-start__inner">
-          <p className="site-eyebrow">Start here</p>
+          
           <h2 id="start-title">Your meals, planned around your life.</h2>
           <p className="site-start__lede">
             A few short questions about how you eat and live, and we&rsquo;ll show you a sample

@@ -97,7 +97,7 @@ export const MEAL_SLOTS: { id: MealSlotId; label: string; optional: boolean }[] 
   { id: 'lunch', label: 'Lunch', optional: false },
   { id: 'snacks', label: 'Snacks', optional: false },
   { id: 'dinner', label: 'Dinner', optional: false },
-  { id: 'late-night', label: 'Late-night snack', optional: true },
+  { id: 'late-night', label: 'Late-night snack', optional: false },
 ]
 
 export type StepField =
