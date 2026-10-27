@@ -1,16 +1,23 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { ArrowLeftIcon } from '../components/icons'
+import { Link, useNavigate } from 'react-router-dom'
+import { ArrowLeftIcon, CheckIcon } from '../components/icons'
 import {
   ACTIVITY_LEVELS,
   DIET_PREFERENCES,
   GOALS,
   MEAL_SLOTS,
-  type AssessmentDraft,
 } from '../data/assessment'
 import { estimateTargets } from '../data/targets'
 import { buildSlotMenus, type MealItem } from '../data/demoMeals'
-import { PLAN_COMPARISON, SUBSCRIPTION_DURATIONS } from '../data/plans'
+import {
+  PLAN_COMPARISON,
+  PLANS,
+  SUBSCRIPTION_DURATIONS,
+  type SubscriptionDurationId,
+  type SubscriptionPlanId,
+} from '../data/plans'
+import { useSession } from '../session'
+import { TargetsPanel } from '../components/TargetsPanel'
 import '../styles/plan.css'
 
 const labelFrom = <T extends { id: string; label: string }>(options: readonly T[], id: string) =>
@@ -74,15 +81,20 @@ function EmptyPlanState() {
 }
 
 export function PlanPage() {
-  const location = useLocation()
-  const incoming = (location.state as { draft?: AssessmentDraft } | null)?.draft
-  const [demoNotice, setDemoNotice] = useState<'basic' | 'premium' | null>(null)
+  const navigate = useNavigate()
+  const { draft, subscription, setSubscription } = useSession()
+  const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlanId | null>(
+    subscription?.plan ?? null,
+  )
+  const [selectedDuration, setSelectedDuration] = useState<SubscriptionDurationId | null>(
+    subscription?.duration ?? null,
+  )
+  const [selectionError, setSelectionError] = useState<string | null>(null)
 
-  if (!incoming) {
+  if (!draft) {
     return <EmptyPlanState />
   }
 
-  const draft = incoming
   const goalLabel = labelFrom(GOALS, draft.goal)
   const activityLabel = labelFrom(ACTIVITY_LEVELS, draft.activityLevel)
   const dietLabel = labelFrom(DIET_PREFERENCES, draft.dietPreference)
@@ -90,27 +102,46 @@ export function PlanPage() {
   const targets = estimateTargets(draft)
   const menus = buildSlotMenus(draft)
 
+  const planName = PLANS.find((plan) => plan.id === selectedPlan)?.name
+  const durationLabel = SUBSCRIPTION_DURATIONS.find(
+    (duration) => duration.id === selectedDuration,
+  )?.months
+  const continueLabel =
+    planName && durationLabel ? `Continue with ${planName} · ${durationLabel}` : 'Continue'
+
+  const handleContinueSelection = () => {
+    if (!selectedPlan || !selectedDuration) {
+      setSelectionError('Select both a plan and a subscription length to continue.')
+      return
+    }
+    setSelectionError(null)
+    setSubscription({ plan: selectedPlan, duration: selectedDuration })
+    navigate('/subscription')
+  }
+
   return (
     <div className="planpage">
-      <section className="planpage-hero" aria-labelledby="plan-title">
+      <section className="page-hero" aria-labelledby="plan-title">
         <div className="site-container">
-          <Link to="/" className="planpage-hero__back">
+          <Link to="/" className="page-hero__back">
             <ArrowLeftIcon />
             Back to the homepage
           </Link>
-          <p className="site-eyebrow">Your meal plan · Demo</p>
-          <h1 id="plan-title">Your sample plan, sketched out</h1>
-          <p className="planpage-hero__lede">
-            Based on the assessment you just completed. Everything on this page is illustrative —
-            rough estimates and sample suggestions, not a medical prescription.
+          <p className="site-eyebrow">Personalized meal plan</p>
+          <h1 id="plan-title">Your meal plan</h1>
+          <p className="page-hero__lede">
+            Built from the assessment you just completed. Every estimate on this page is
+            illustrative — rough numbers and sample suggestions, not a medical prescription.
           </p>
-          <div className="planpage-hero__actions">
+          <div className="page-hero__actions">
             <Link className="btn btn--secondary" to="/assessment" state={{ draft }}>
               Edit my answers
             </Link>
-            <Link className="btn btn--ghost" to="/">
-              Back to the homepage
-            </Link>
+            {subscription ? (
+              <Link className="btn btn--ghost" to="/subscription">
+                View subscription summary
+              </Link>
+            ) : null}
           </div>
         </div>
       </section>
@@ -125,6 +156,8 @@ export function PlanPage() {
             <span className="planpage-chip">{goalLabel}</span>
             <span className="planpage-chip">{activityLabel}</span>
             <span className="planpage-chip">{dietLabel}</span>
+            <span className="planpage-chip">Current: {draft.currentWeightKg} kg</span>
+            <span className="planpage-chip">Target: {draft.targetWeightKg} kg</span>
             {slotLabels.length > 0 ? (
               <span className="planpage-chip planpage-chip--muted">
                 Meals: {slotLabels.join(' · ')}
@@ -133,65 +166,7 @@ export function PlanPage() {
           </div>
 
           {targets ? (
-            <div className="planpage-panel targets">
-              <div className="targets__main">
-                <p className="targets__label">Estimated daily calorie target</p>
-                <p className="targets__value">
-                  {targets.calories}
-                  <span> kcal</span>
-                </p>
-                {targets.clampedToRange ? (
-                  <p className="targets__clamp">
-                    Adjusted into a safe range (1,200–3,500 kcal) instead of reporting an extreme
-                    number.
-                  </p>
-                ) : null}
-                <p className="planpage-method">
-                  <strong>How it was estimated:</strong> {targets.methodNote}
-                </p>
-              </div>
-              <ul className="targets__macros" aria-label="Estimated daily macro targets">
-                <li className="targets__macro">
-                  <div className="targets__row">
-                    <span>Protein</span>
-                    <strong>{targets.proteinGrams} g</strong>
-                    <em>{targets.proteinPct}%</em>
-                  </div>
-                  <div className="targets__track" aria-hidden="true">
-                    <span
-                      className="targets__fill targets__fill--protein"
-                      style={{ width: `${targets.proteinPct}%` }}
-                    />
-                  </div>
-                </li>
-                <li className="targets__macro">
-                  <div className="targets__row">
-                    <span>Carbohydrates</span>
-                    <strong>{targets.carbsGrams} g</strong>
-                    <em>{targets.carbsPct}%</em>
-                  </div>
-                  <div className="targets__track" aria-hidden="true">
-                    <span
-                      className="targets__fill targets__fill--carbs"
-                      style={{ width: `${targets.carbsPct}%` }}
-                    />
-                  </div>
-                </li>
-                <li className="targets__macro">
-                  <div className="targets__row">
-                    <span>Fats</span>
-                    <strong>{targets.fatGrams} g</strong>
-                    <em>{targets.fatPct}%</em>
-                  </div>
-                  <div className="targets__track" aria-hidden="true">
-                    <span
-                      className="targets__fill targets__fill--fats"
-                      style={{ width: `${targets.fatPct}%` }}
-                    />
-                  </div>
-                </li>
-              </ul>
-            </div>
+            <TargetsPanel targets={targets} />
           ) : (
             <p className="planpage-note">
               We couldn&rsquo;t estimate targets from the supplied answers. Use &ldquo;Edit my
@@ -211,7 +186,7 @@ export function PlanPage() {
         <div className="site-container planpage-container">
           <div className="planpage-head">
             <p className="site-eyebrow">Meal suggestions</p>
-            <h2 id="meals-title">Sample meals for your slots</h2>
+            <h2 id="meals-title">Meals for your slots</h2>
             <p className="planpage-head__lede">
               Only the slots you selected are listed, and every meal was filtered against your
               diet preference and restrictions.
@@ -240,7 +215,7 @@ export function PlanPage() {
           <p className="planpage-note">
             <strong>Allergy caution:</strong> meals are tagged with the intersections we know
             about (dairy, gluten, nuts, and so on), but a missing tag never means a meal is
-            allergy-safe. Always double-check ingredients before ordering.
+            allergy-safe. Always double-check ingredients before you choose.
           </p>
         </div>
       </section>
@@ -249,10 +224,10 @@ export function PlanPage() {
         <div className="site-container planpage-container">
           <div className="planpage-head">
             <p className="site-eyebrow">Subscription</p>
-            <h2 id="plans-title">Basic vs Premium</h2>
+            <h2 id="plans-title">Choose how you&rsquo;d like to subscribe</h2>
             <p className="planpage-head__lede">
-              Both levels keep the same structured meals and recommended portions. Premium adds
-              Super Flexibility — portion sizes and meal slots that follow your appetite.
+              Basic keeps structured meals and recommended portions. Premium adds Super
+              Flexibility — portion sizes and meal slots that follow your appetite.
             </p>
           </div>
 
@@ -279,33 +254,83 @@ export function PlanPage() {
             </table>
           </div>
 
-          <h3 className="planpage-subhead">Subscription lengths</h3>
-          <div className="planpage-durations">
-            {SUBSCRIPTION_DURATIONS.map((duration) => (
-              <div className="planpage-duration" key={duration.months}>
-                <strong>{duration.months}</strong>
-                <span>{duration.note}</span>
-              </div>
+          <h3 className="planpage-subhead">Choose your plan</h3>
+          <div className="planpick-grid" role="radiogroup" aria-label="Choose your plan">
+            {PLANS.map((plan) => (
+              <label
+                key={plan.id}
+                className={`planpick${selectedPlan === plan.id ? ' is-selected' : ''}${
+                  plan.id === 'premium' ? ' planpick--premium' : ''
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="plan-choice"
+                  value={plan.id}
+                  checked={selectedPlan === plan.id}
+                  onChange={() => setSelectedPlan(plan.id)}
+                />
+                <span className="planpick__name">
+                  <strong>{plan.name}</strong>
+                  <span className="planpick__tagline">{plan.tagline}</span>
+                </span>
+                <span className="planpick__desc">{plan.description}</span>
+                <span className="planpick__features">
+                  {plan.features.map((feature) => (
+                    <span key={feature}>
+                      <CheckIcon />
+                      {feature}
+                    </span>
+                  ))}
+                </span>
+              </label>
             ))}
           </div>
+
+          <h3 className="planpage-subhead">Subscription length</h3>
+          <div className="planpage-durations" role="radiogroup" aria-label="Choose a length">
+            {SUBSCRIPTION_DURATIONS.map((duration) => (
+              <label
+                key={duration.id}
+                className={`planpage-duration${
+                  selectedDuration === duration.id ? ' is-selected' : ''
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="duration-choice"
+                  value={duration.id}
+                  checked={selectedDuration === duration.id}
+                  onChange={() => setSelectedDuration(duration.id)}
+                />
+                <strong>{duration.months}</strong>
+                <span>{duration.note}</span>
+              </label>
+            ))}
+          </div>
+
           <p className="planpage-note">
-            Pricing will be confirmed later — nothing on this page is a quote.
+            Pricing will be confirmed later — nothing on this page is a quote. This is a
+            prototype selection — no order, payment, or delivery happens.
           </p>
 
-          <div className="planpage-demo">
-            <button type="button" className="btn btn--secondary" onClick={() => setDemoNotice('basic')}>
-              Choose Basic
+          {selectionError ? (
+            <p className="planpage-error" role="alert">
+              {selectionError}
+            </p>
+          ) : null}
+
+          <div className="planpage-selection-actions">
+            <button
+              type="button"
+              className="btn btn--primary btn--lg"
+              onClick={handleContinueSelection}
+            >
+              {continueLabel}
             </button>
-            <button type="button" className="btn btn--primary" onClick={() => setDemoNotice('premium')}>
-              Choose Premium
-            </button>
-            {demoNotice ? (
-              <p className="planpage-demo__notice" role="status">
-                {demoNotice === 'premium' ? 'Premium selected (demo).' : 'Basic selected (demo).'}{' '}
-                Ordering, payment, and delivery aren&rsquo;t part of this prototype — no
-                subscription was started.
-              </p>
-            ) : null}
+            <Link className="btn btn--ghost" to="/">
+              Back to the homepage
+            </Link>
           </div>
         </div>
       </section>

@@ -178,3 +178,12 @@ export function buildSlotMenus(draft: AssessmentDraft): SlotMenu[] {
     blockedByOtherRestriction: draft.restrictions.includes('other'),
   }))
 }
+
+/** One sample meal per selected slot (first match from the filtered menu). */
+export function buildSampleDay(
+  draft: AssessmentDraft,
+): { slot: MealSlotId; meal: MealItem }[] {
+  return buildSlotMenus(draft).flatMap(({ slot, meals }) =>
+    meals.length > 0 ? [{ slot, meal: meals[0] }] : [],
+  )
+}

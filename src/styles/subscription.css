@@ -1,0 +1,131 @@
+/* =====================================================================
+   Subscription summary page — src/pages/SubscriptionPage.tsx
+   ===================================================================== */
+
+/* ---- Page hero (shared styles in base.css) ---- */
+
+.subpage-body {
+  padding-block: var(--space-12) var(--space-16);
+}
+.subpage-container {
+  max-width: 64rem;
+}
+
+.subpage-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+.subpage-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-8) var(--space-6);
+}
+.subpage-grid .subpage-panel + .subpage-panel {
+  margin-top: var(--space-6);
+}
+.subpage-panel__kicker {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.subpage-panel h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-2xl);
+}
+.subpage-panel__tagline {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-text);
+}
+.subpage-panel > p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.subpage-list {
+  list-style: none;
+  margin: var(--space-5) 0 0;
+  padding: var(--space-5) 0 0;
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: var(--space-3);
+}
+.subpage-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+.subpage-duration {
+  margin: 0;
+  font-size: var(--text-xl);
+  color: var(--color-text-strong);
+}
+.subpage-panel__note {
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.subpage-recap {
+  margin: 0;
+  display: grid;
+}
+.subpage-recap div {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+}
+.subpage-recap div:last-child {
+  border-bottom: 0;
+}
+.subpage-recap dt {
+  color: var(--color-text-muted);
+}
+.subpage-recap dd {
+  margin: 0;
+  color: var(--color-text-strong);
+  font-weight: var(--weight-medium);
+}
+
+.subpage-note {
+  max-width: 56ch;
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.subpage-note strong {
+  color: var(--color-text-strong);
+}
+.subpage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+@media (max-width: 960px) {
+  .subpage-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .subpage-panel {
+    padding: var(--space-6) var(--space-5);
+  }
+  .subpage-recap div {
+    grid-template-columns: 1fr;
+    gap: 0.125rem;
+  }
+}

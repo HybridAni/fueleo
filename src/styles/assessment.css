@@ -2,39 +2,7 @@
    Assessment page — src/pages/AssessmentPage.tsx
    ===================================================================== */
 
-/* ---- Page hero ---- */
-
-.assess-hero {
-  padding-block: var(--space-12) var(--space-10);
-  border-bottom: 1px solid var(--color-border);
-}
-.assess-hero__back {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-8);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-semibold);
-  color: var(--color-text-muted);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-.assess-hero__back:hover {
-  color: var(--color-accent);
-}
-.assess-hero__back .arrow-left-icon {
-  width: 16px;
-  height: 16px;
-}
-.assess-hero h1 {
-  max-width: 20ch;
-}
-.assess-hero__lede {
-  max-width: 52ch;
-  margin-top: var(--space-5);
-  font-size: var(--text-md);
-  color: var(--color-text-muted);
-}
+/* ---- Page hero (shared styles in base.css) ---- */
 
 .assess-body {
   padding-block: var(--space-10) var(--space-16);
@@ -425,9 +393,6 @@ button.assess-rail__cell:hover {
 }
 
 @media (max-width: 640px) {
-  .assess-hero {
-    padding-block: var(--space-8);
-  }
   .assess-body {
     padding-block: var(--space-8) var(--space-12);
   }

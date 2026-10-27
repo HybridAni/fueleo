@@ -131,7 +131,9 @@ export function validateStep(step: number, draft: AssessmentDraft): StepErrors {
     else if (!inRange(draft.currentWeightKg, 30, 300))
       errors.currentWeightKg = 'Enter a weight between 30 and 300 kg.'
     if (draft.activityLevel === '') errors.activityLevel = 'Pick the option closest to your typical week.'
-    if (draft.targetWeightKg.trim() !== '' && !inRange(draft.targetWeightKg, 30, 300)) {
+    if (draft.targetWeightKg.trim() === '') {
+      errors.targetWeightKg = 'Please enter your target weight.'
+    } else if (!inRange(draft.targetWeightKg, 30, 300)) {
       errors.targetWeightKg = 'Target weight must be between 30 and 300 kg.'
     }
   }

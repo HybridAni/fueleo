@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { useTheme } from './theme'
 import { Header } from './components/Header'
@@ -7,7 +7,23 @@ import { LandingPage } from './pages/LandingPage'
 import { HowItWorksPage } from './pages/HowItWorksPage'
 import { AssessmentPage } from './pages/AssessmentPage'
 import { PlanPage } from './pages/PlanPage'
+import { SubscriptionPage } from './pages/SubscriptionPage'
+import { DashboardPage } from './pages/DashboardPage'
+import { SessionContext, type SessionValues, type SubscriptionSelection } from './session'
+import type { AssessmentDraft } from './data/assessment'
 import './styles/base.css'
+
+/* In-memory session (assessment + subscription). Refreshing loses it — pages
+   handle the missing-data case with intentional empty states. */
+function SessionProvider({ children }: { children: ReactNode }) {
+  const [draft, setDraft] = useState<AssessmentDraft | null>(null)
+  const [subscription, setSubscription] = useState<SubscriptionSelection | null>(null)
+  const value = useMemo<SessionValues>(
+    () => ({ draft, subscription, setAssessment: setDraft, setSubscription }),
+    [draft, subscription],
+  )
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+}
 
 function SiteShell() {
   const { theme, toggleTheme } = useTheme()
@@ -38,6 +54,8 @@ function SiteShell() {
           <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/assessment" element={<AssessmentPage />} />
           <Route path="/plan" element={<PlanPage />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
@@ -49,7 +67,9 @@ function SiteShell() {
 function App() {
   return (
     <BrowserRouter>
-      <SiteShell />
+      <SessionProvider>
+        <SiteShell />
+      </SessionProvider>
     </BrowserRouter>
   )
 }

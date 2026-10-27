@@ -16,6 +16,7 @@ import {
   type StepErrors,
   type StepField,
 } from '../data/assessment'
+import { useSession } from '../session'
 import '../styles/assessment.css'
 
 /* --------------------------------------------------------------------------
@@ -171,6 +172,7 @@ const FOCUS_IDS: Partial<Record<StepField, string>> = {
 export function AssessmentPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { setAssessment } = useSession()
   const incoming = (location.state as { draft?: AssessmentDraft } | null)?.draft
   const [step, setStep] = useState(() => (incoming ? STEP_TITLES.length - 1 : 0))
   const [draft, setDraft] = useState<AssessmentDraft>(() => {
@@ -216,6 +218,7 @@ export function AssessmentPage() {
   const handleContinue = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (step === STEP_TITLES.length - 1) {
+      setAssessment(draft)
       navigate('/plan', { state: { draft } })
       return
     }
@@ -227,7 +230,11 @@ export function AssessmentPage() {
       document.getElementById(focusId ?? '')?.focus({ preventScroll: true })
       return
     }
-    goTo(step + 1)
+    // Advance forward. goTo() intentionally only navigates backward (rail/edit
+    // shortcuts), so continuing uses the step setter directly.
+    setStep(step + 1)
+    setErrors({})
+    window.scrollTo({ top: 0, left: 0 })
   }
 
   const optionClassName = (selected: boolean) => `assess-option${selected ? ' is-selected' : ''}`
@@ -320,11 +327,11 @@ export function AssessmentPage() {
           <div className="assess-row">
             <NumericField
               id="targetWeightKg"
-              label="Target weight (optional)"
+              label="Target weight"
               unit="kg"
               value={draft.targetWeightKg}
               onChange={(value) => setField('targetWeightKg', value)}
-              hint="Only needed if your goal is weight loss."
+              hint="We'll use your target weight to shape your nutrition plan."
               error={errors.targetWeightKg}
             />
           </div>
@@ -367,19 +374,19 @@ export function AssessmentPage() {
           <FieldError id="goal-error" message={errors.goal} />
         </fieldset>
 
-        {draft.goal === 'weight-loss' && (
+        {draft.goal !== '' && (
           <div className="assess-callout">
-            <h3>About a target weight</h3>
+            <h3>About your target weight</h3>
             {draft.targetWeightKg.trim() !== '' ? (
               <p>
-                Your target weight is set to {draft.targetWeightKg} kg — portions in the future
-                plan would be sized toward a gradual change. You can adjust it in the About-you
-                step at any time.
+                Your target weight is {draft.targetWeightKg} kg. Together with your current weight
+                and activity level, it shapes the calorie and macro targets estimated for your
+                plan.
               </p>
             ) : (
               <p>
-                You haven&rsquo;t entered a target weight yet. Go back to the About-you step to
-                add one — it helps size portions for a gradual, sustainable change.
+                Add a target weight in the About-you step — it shapes the calorie and macro
+                targets estimated for your plan.
               </p>
             )}
           </div>
@@ -584,15 +591,15 @@ export function AssessmentPage() {
 
   return (
     <div className="assess-page">
-      <section className="assess-hero">
+      <section className="page-hero">
         <div className="site-container">
-          <Link to="/" className="assess-hero__back">
+          <Link to="/" className="page-hero__back">
             <ArrowLeftIcon />
             Back to the homepage
           </Link>
           <p className="site-eyebrow">Personal nutrition assessment</p>
           <h1>Tell us how you eat and live.</h1>
-          <p className="assess-hero__lede">
+          <p className="page-hero__lede">
             Five short steps build the profile a future Fueleo plan will be shaped around. Your
             answers stay in this page&rsquo;s memory only — nothing is saved or sent anywhere.
           </p>

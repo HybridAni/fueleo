@@ -73,15 +73,15 @@ export function HowItWorksPage() {
   return (
     <div className="how-page">
       {/* Page hero */}
-      <section id="top" className="how-hero" aria-labelledby="how-page-title">
+      <section id="top" className="page-hero" aria-labelledby="how-page-title">
         <div className="site-container">
-          <Link to="/" className="how-hero__back">
+          <Link to="/" className="page-hero__back">
             <ArrowLeftIcon />
             Back to the homepage
           </Link>
           <p className="site-eyebrow">How Fueleo works</p>
           <h1 id="how-page-title">From your goals to delivered meals.</h1>
-          <p className="how-hero__lede">
+          <p className="page-hero__lede">
             Six steps turn a short profile into a working meal plan, a subscription, and a kitchen
             that cooks to your slots — explained end to end.
           </p>
@@ -279,7 +279,7 @@ export function HowItWorksPage() {
             <p className="page-step">
               <span>03</span> Subscription selection
             </p>
-            <h2 id="subscription-title">A subscription length, not a one-week plan</h2>
+            <h2 id="subscription-title">Fitness goals aren't achieved in a week</h2>
             <p className="page-head__lede">
               Subscriptions run for 1, 3, 6, or 12 months. The length sets how long your plan and
               deliveries continue — it isn&rsquo;t tied to a single week of meals.
