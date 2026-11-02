@@ -129,3 +129,47 @@
     gap: 0.125rem;
   }
 }
+
+/* ---- Pricing summary ---- */
+
+.subpage-pricing__total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: 0;
+}
+.subpage-pricing__total strong {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--color-text-strong);
+}
+.subpage-pricing__total span {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.subpage-pricing__rows {
+  margin: var(--space-5) 0 0;
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid var(--color-border);
+  display: grid;
+  gap: var(--space-3);
+}
+.subpage-pricing__rows div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+}
+.subpage-pricing__rows dt {
+  color: var(--color-text-muted);
+}
+.subpage-pricing__rows dd {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+.subpage-pricing__saving dd {
+  color: var(--color-accent);
+}

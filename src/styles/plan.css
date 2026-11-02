@@ -494,3 +494,115 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ---- Pricing panel ---- */
+
+.planpage-pricing {
+  margin-top: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-8) var(--space-6);
+}
+.planpage-pricing--empty {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  padding: var(--space-6);
+}
+.planpage-pricing__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.planpage-pricing__kicker {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.planpage-pricing__context {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-text);
+}
+.planpage-pricing__main {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-8);
+  align-items: center;
+  margin-top: var(--space-5);
+}
+.planpage-pricing__total {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.planpage-pricing__value {
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: var(--weight-bold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-text-strong);
+  animation: price-in 240ms ease-out;
+}
+@keyframes price-in {
+  from {
+    opacity: 0.35;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.planpage-pricing__period {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+.planpage-pricing__rows {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+.planpage-pricing__rows div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+}
+.planpage-pricing__rows dt {
+  color: var(--color-text-muted);
+}
+.planpage-pricing__rows dd {
+  margin: 0;
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-strong);
+}
+.planpage-pricing__saving dd {
+  color: var(--color-accent);
+}
+
+.planpage-duration__tag {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-soft);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-accent-text);
+}
+
+@media (max-width: 640px) {
+  .planpage-pricing__main {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+}

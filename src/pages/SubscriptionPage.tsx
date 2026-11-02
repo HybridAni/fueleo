@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ArrowLeftIcon, CheckIcon } from '../components/icons'
 import { DIET_PREFERENCES, GOALS, MEAL_SLOTS, RESTRICTIONS } from '../data/assessment'
 import { PLANS, SUBSCRIPTION_DURATIONS } from '../data/plans'
+import { getPriceEstimate, formatINR } from '../data/pricing'
 import { useSession } from '../session'
 import '../styles/subscription.css'
 
@@ -55,6 +56,7 @@ export function SubscriptionPage() {
   const duration =
     SUBSCRIPTION_DURATIONS.find((item) => item.id === subscription.duration) ??
     SUBSCRIPTION_DURATIONS[0]
+  const pricing = getPriceEstimate(draft.goal, subscription.plan, subscription.duration)
 
   const goalLabel = labelFrom(GOALS, draft.goal)
   const dietLabel = labelFrom(DIET_PREFERENCES, draft.dietPreference)
@@ -114,6 +116,42 @@ export function SubscriptionPage() {
                 <p className="subpage-panel__kicker">Subscription length</p>
                 <p className="subpage-duration">{duration.months}</p>
                 <p className="subpage-panel__note">{duration.note}</p>
+              </div>
+              <div className="subpage-panel">
+                <p className="subpage-panel__kicker">Pricing</p>
+                {pricing ? (
+                  <>
+                    <p className="subpage-pricing__total">
+                      <strong>{formatINR(pricing.total)}</strong>
+                      <span>total · {duration.months}</span>
+                    </p>
+                    <dl className="subpage-pricing__rows">
+                      <div>
+                        <dt>Effective monthly</dt>
+                        <dd>{formatINR(pricing.monthlyRate)} / month</dd>
+                      </div>
+                      <div>
+                        <dt>Reference · {pricing.durationMonths} × 1-month rate</dt>
+                        <dd>{formatINR(pricing.referenceTotal)}</dd>
+                      </div>
+                      <div className={pricing.savings > 0 ? 'subpage-pricing__saving' : ''}>
+                        <dt>You save vs 1-month renewals</dt>
+                        <dd>
+                          {pricing.savings > 0
+                            ? `${formatINR(pricing.savings)} (${pricing.savingsPercent.toFixed(1)}%)`
+                            : '₹0 (0%)'}
+                        </dd>
+                      </div>
+                    </dl>
+                  </>
+                ) : (
+                  <p className="subpage-panel__note">
+                    Price unavailable — please review your selection.
+                  </p>
+                )}
+                <p className="subpage-panel__note">
+                  Illustrative demo pricing in INR — no payment is collected.
+                </p>
               </div>
             </div>
 

@@ -16,6 +16,7 @@ import {
   type SubscriptionDurationId,
   type SubscriptionPlanId,
 } from '../data/plans'
+import { getBestValueDuration, getPriceEstimate, formatINR } from '../data/pricing'
 import { useSession } from '../session'
 import { TargetsPanel } from '../components/TargetsPanel'
 import '../styles/plan.css'
@@ -108,6 +109,8 @@ export function PlanPage() {
   )?.months
   const continueLabel =
     planName && durationLabel ? `Continue with ${planName} · ${durationLabel}` : 'Continue'
+  const pricing = getPriceEstimate(draft.goal, selectedPlan, selectedDuration)
+  const bestValueDuration = getBestValueDuration(draft.goal, selectedPlan)
 
   const handleContinueSelection = () => {
     if (!selectedPlan || !selectedDuration) {
@@ -305,13 +308,61 @@ export function PlanPage() {
                 />
                 <strong>{duration.months}</strong>
                 <span>{duration.note}</span>
+                {bestValueDuration === duration.id ? (
+                  <span className="planpage-duration__tag">Best value</span>
+                ) : null}
               </label>
             ))}
           </div>
 
+          {pricing ? (
+            <div className="planpage-pricing" aria-live="polite">
+              <div className="planpage-pricing__head">
+                <span className="planpage-pricing__kicker">Subscription price</span>
+                <span className="planpage-pricing__context">
+                  {goalLabel} · {planName}
+                </span>
+              </div>
+              <div className="planpage-pricing__main">
+                <p className="planpage-pricing__total">
+                  <span
+                    className="planpage-pricing__value"
+                    key={pricing.total}
+                    aria-label={`Total ${formatINR(pricing.total)} for ${durationLabel}`}
+                  >
+                    {formatINR(pricing.total)}
+                  </span>
+                  <span className="planpage-pricing__period">total · {durationLabel}</span>
+                </p>
+                <dl className="planpage-pricing__rows">
+                  <div>
+                    <dt>Effective monthly</dt>
+                    <dd>{formatINR(pricing.monthlyRate)} / month</dd>
+                  </div>
+                  <div>
+                    <dt>Reference · {pricing.durationMonths} × 1-month rate</dt>
+                    <dd>{formatINR(pricing.referenceTotal)}</dd>
+                  </div>
+                  <div className={pricing.savings > 0 ? 'planpage-pricing__saving' : ''}>
+                    <dt>You save</dt>
+                    <dd>
+                      {pricing.savings > 0
+                        ? `${formatINR(pricing.savings)} (${pricing.savingsPercent.toFixed(1)}%)`
+                        : '₹0 (0%)'}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          ) : (
+            <div className="planpage-pricing planpage-pricing--empty">
+              Choose a plan and a subscription length above to see the price.
+            </div>
+          )}
+
           <p className="planpage-note">
-            Pricing will be confirmed later — nothing on this page is a quote. This is a
-            prototype selection — no order, payment, or delivery happens.
+            Rates shown are illustrative INR estimates for this demo — final pricing may change.
+            No order, payment, or delivery happens.
           </p>
 
           {selectionError ? (

@@ -4,6 +4,7 @@ import { ACTIVITY_LEVELS, DIET_PREFERENCES, GOALS, MEAL_SLOTS } from '../data/as
 import { estimateTargets } from '../data/targets'
 import { buildSampleDay } from '../data/demoMeals'
 import { PLANS, SUBSCRIPTION_DURATIONS } from '../data/plans'
+import { getPriceEstimate, formatINR } from '../data/pricing'
 import { useSession } from '../session'
 import { TargetsPanel } from '../components/TargetsPanel'
 import '../styles/dashboard.css'
@@ -68,6 +69,7 @@ export function DashboardPage() {
   const duration =
     SUBSCRIPTION_DURATIONS.find((item) => item.id === subscription.duration) ??
     SUBSCRIPTION_DURATIONS[0]
+  const pricing = getPriceEstimate(draft.goal, subscription.plan, subscription.duration)
 
   const targets = estimateTargets(draft)
   const schedule = buildSampleDay(draft)
@@ -125,6 +127,12 @@ export function DashboardPage() {
                     {plan.tagline}
                     {plan.id === 'premium' ? ' — Super Flexibility' : ''}
                   </p>
+                  {pricing ? (
+                    <p className="dash-plan__price">
+                      <strong>{formatINR(pricing.total)}</strong>
+                      <span> total · {formatINR(pricing.monthlyRate)}/month</span>
+                    </p>
+                  ) : null}
                 </div>
                 <span className="dash-chip dash-chip--demo">Demo session</span>
               </div>

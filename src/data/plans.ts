@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------------
-   Subscription content for the plan/subscription flow. No prices are defined.
+   Subscription plans, durations, and comparison. Prices live in pricing.ts.
    -------------------------------------------------------------------------- */
 
 export type SubscriptionPlanId = 'basic' | 'premium'
