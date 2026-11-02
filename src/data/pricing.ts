@@ -96,6 +96,20 @@ export function getBestValueDuration(
   return best
 }
 
+/** Lowest monthly rate across all goals and durations for a tier (INR). */
+export function getFromPriceInr(plan: SubscriptionPlanId): number {
+  let min = Number.POSITIVE_INFINITY
+  const goals = Object.keys(MONTHLY_RATE_INR[plan]) as GoalId[]
+  for (const goal of goals) {
+    const durations = Object.keys(MONTHLY_RATE_INR[plan][goal]) as SubscriptionDurationId[]
+    for (const duration of durations) {
+      const rate = MONTHLY_RATE_INR[plan][goal][duration]
+      if (rate < min) min = rate
+    }
+  }
+  return Number.isFinite(min) ? min : 0
+}
+
 const inrFormatter = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 })
 
 /** Format a whole-rupee amount with Indian digit grouping, e.g. ₹1,08,000. */

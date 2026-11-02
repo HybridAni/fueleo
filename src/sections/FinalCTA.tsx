@@ -6,18 +6,18 @@ export function FinalCTA() {
     <section id="start" className="site-section site-start" aria-labelledby="start-title">
       <div className="site-container">
         <div className="site-start__inner">
-          
-          <h2 id="start-title">Your meals, planned around your life.</h2>
+          <p className="site-eyebrow">Fueleo</p>
+          <h2 id="start-title">Let&rsquo;s plan your actual meals.</h2>
           <p className="site-start__lede">
-            A few short questions about how you eat and live, and we&rsquo;ll show you a sample
-            plan you can actually eat. Choose a plan and we handle the cooking.
+            Five short questions — goal, target weight, diet, and schedule — turn into a week of
+            meals, portions, and a clear price. No payment happens here.
           </p>
           <div className="site-start__actions">
             <Link className="btn btn--primary btn--lg" to="/assessment">
-              Start the assessment
+              Build my plan
             </Link>
             <Link className="btn btn--ghost btn--lg" to="/how-it-works">
-              See how it works
+              Explore how it works
             </Link>
           </div>
         </div>

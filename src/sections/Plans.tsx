@@ -1,5 +1,6 @@
 import { basicFeatures, premiumFeatures } from '../data/meals'
 import { CheckIcon } from '../components/icons'
+import { formatINR, getFromPriceInr } from '../data/pricing'
 import '../styles/plans.css'
 
 export function Plans() {
@@ -14,8 +15,8 @@ export function Plans() {
           <p className="site-eyebrow">Plans</p>
           <h2 id="plans-title">Two ways to subscribe</h2>
           <p className="site-section-head__lede">
-            Start with everyday structure, or take full flexibility from day one. Both run as
-            subscriptions of one to twelve months, with delivery matched to your meal slots.
+            Basic keeps structured meals and recommended portions. Premium adds Super Flexibility —
+            adjust portion sizes and meal slots as your appetite changes.
           </p>
         </div>
         <div className="plans">
@@ -28,6 +29,10 @@ export function Plans() {
                 consistently.
               </p>
             </header>
+            <p className="plan__price">
+              From <strong>{formatINR(getFromPriceInr('basic'))}</strong>
+              <span> / month</span>
+            </p>
             <ul className="plan__features">
               {basicFeatures.map((feature) => (
                 <li key={feature}>
@@ -42,15 +47,18 @@ export function Plans() {
           </article>
 
           <article className="plan plan--premium">
-            <span className="badge badge--accent plan__badge">Super Flexibility</span>
             <header className="plan__head">
-              <p className="plan__kicker">Adapts to your appetite</p>
+              <p className="plan__kicker">Super Flexibility</p>
               <h3>Premium</h3>
               <p className="plan__desc">
-                Everything in Basic, plus the freedom to change how much and how often you eat —
-                day to day.
+                Everything in Basic, plus portions and meal slots that follow your appetite and
+                routine.
               </p>
             </header>
+            <p className="plan__price">
+              From <strong>{formatINR(getFromPriceInr('premium'))}</strong>
+              <span> / month</span>
+            </p>
             <ul className="plan__features">
               {premiumFeatures.map((feature) => (
                 <li key={feature}>
@@ -69,8 +77,9 @@ export function Plans() {
           </article>
         </div>
         <p className="site-note">
-          Subscription pricing is being finalized for the beta menu — no figures on this page are
-          quotes.
+          Demo INR pricing — rates depend on your goal and duration, so the &ldquo;from&rdquo;
+          price above is the lowest monthly rate across goals. No order, payment, or delivery
+          happens from this page.
         </p>
       </div>
     </section>

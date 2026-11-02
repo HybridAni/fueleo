@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { IMAGES } from '../data/meals'
-import { CheckIcon } from '../components/icons'
 import '../styles/hero.css'
 
 export function Hero() {
@@ -8,30 +7,24 @@ export function Hero() {
     <section id="top" className="site-hero" aria-labelledby="hero-title">
       <div className="site-container site-hero__grid">
         <div className="site-hero__copy">
-          <p className="site-eyebrow">Personalized nutrition · delivered meals</p>
+          <p className="site-eyebrow">Personalized nutrition · planned weekly</p>
           <h1 id="hero-title">Eating well should fit your life.</h1>
           <p className="site-hero__lede">
-            Fueleo plans your meals around your goals, the foods you love, and the rhythm of your
-            actual days — then delivers them cooked and ready.
+            Fueleo builds a week of meals around your goal, your target weight, the foods you
+            like, and the pace of your days — then cooks it and delivers it ready.
           </p>
           <div className="site-hero__actions">
             <Link className="btn btn--primary btn--lg" to="/assessment">
               Build my plan
             </Link>
             <Link className="btn btn--secondary btn--lg" to="/how-it-works">
-              How it works
+              Explore how it works
             </Link>
           </div>
-          <ul className="site-hero__notes">
-            <li>
-              <CheckIcon />
-              Plans flex around foods you already enjoy
-            </li>
-            <li>
-              <CheckIcon />
-              Freshly cooked, delivered on your schedule
-            </li>
-          </ul>
+          <p className="site-hero__note">
+            Plans adapt to your goal, diet, restrictions, and meal schedule. Demo pricing in INR —
+            nothing is charged from this prototype.
+          </p>
         </div>
         <figure className="site-hero__media">
           <img
@@ -43,7 +36,7 @@ export function Hero() {
             decoding="async"
           />
           <figcaption className="site-hero__caption">
-            This week — butter chicken with basmati
+            Butter chicken with basmati — one dish from the current rotation.
           </figcaption>
         </figure>
       </div>

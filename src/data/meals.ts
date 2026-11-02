@@ -31,17 +31,17 @@ export const steps: Step[] = [
   {
     num: '01',
     title: 'Tell us about yourself',
-    text: 'A short intro, not a drill. Your goals, the foods you love, the ones you skip, and the shape of a normal week.',
+    text: 'Your goal, target weight, activity, foods you like and avoid, and the meal slots that fit your week.',
   },
   {
     num: '02',
-    title: 'Get a plan tailored to you',
-    text: 'We balance protein, portions, and variety around your goal and routine, then shape a full week of real meals.',
+    title: 'Get a week planned for you',
+    text: 'Calorie and macro targets shape portions; meals are then matched to your diet and restrictions.',
   },
   {
     num: '03',
-    title: 'Choose meals, slots, and length',
-    text: 'Pick the meal slots you want covered and a subscription length of one to twelve months — then we handle the cooking and the delivery.',
+    title: 'Choose a plan and duration',
+    text: 'Pick Basic or Premium and a length from 1 to 12 months. The total price updates as you choose.',
   },
 ]
 
@@ -83,7 +83,7 @@ export const meals: Meal[] = [
 export const basicFeatures: string[] = [
   'Weekly menu built around your goals and preferences',
   'Recommended portions for balanced meals',
-  'Freshly cooked, delivered on your schedule',
+  'Freshly cooked and portioned for your week',
 ]
 
 export const premiumFeatures: string[] = [
